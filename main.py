@@ -1,39 +1,53 @@
 from art import logo
-import random
+from random import randint
+
+EASY_LEVEL_ATTEMPTS = 10
+HARD_LEVEL_ATTEMPTS = 5
 
 def random_number():
-    return random.choice(range(1,101))
+    return randint(0,100)
 
-def guess_num_game(number, mode):
-    if mode=="easy":
-        chances=10
+def set_difficulty():
+    level=input("Type 'easy' if you want the easy mode, else type 'hard': ").lower()
+    if level == "easy":
+        return EASY_LEVEL_ATTEMPTS
+    elif level == "hard":
+        return HARD_LEVEL_ATTEMPTS
     else:
-        chances=4
-    
-    while(chances>0):
-        user_number=int(input("Guess the number: "))
-        if user_number==number:
+        return 0
+
+def guess_num_game(number, attempts):
+    while(attempts>0):
+        guess=int(input("Guess the number: "))
+        if guess==number:
             return "win"
-        elif user_number<number:
+        elif guess<number:
             print("Too low")
-            chances-=1
-            print(f"{chances} more tries")
+            attempts-=1
+            print(f"{attempts} more tries")
         else:
             print("Too high")
-            chances-=1
-            print(f"{chances} more tries")
+            attempts-=1
+            print(f"{attempts} more tries")
     return "lose"    
     
 print(logo)
-
 continue_game=True
+print("Welcome to the game!")
 
 while(continue_game):
-    rand_num=random_number()
-    
-    game_mode=input("Type 'easy' if you want the easy mode, else type 'hard': ").lower()
-    
-    result=guess_num_game(rand_num, game_mode)
+
+    answer=random_number()
+    print("I'm thinking a number betwee 1 and 100")
+
+    attempts=set_difficulty()
+    if not attempts:
+        print("Not an option, ending game")
+        continue_game=False
+        break 
+    print(f"You have {attempts} attempts")
+
+    result=guess_num_game(answer, attempts)
     
     print(f"You {result}")
 
